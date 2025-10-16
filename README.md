@@ -1,56 +1,61 @@
 # Multivariate Linear Regression — Practical Lab 2
 
-This repository contains a Jupyter Notebook, `Multivariate_linear_regression.ipynb`, implementing a practical lab on multivariate linear regression, non-parametric models, and cross-validation using the Diabetes dataset from scikit-learn.
+What this project is
+- A reproducible notebook that demonstrates:
+  - Exploratory data analysis on the Diabetes dataset
+  - Univariate polynomial regression using BMI (degrees 0–5)
+  - Multivariate polynomial regression (degree 2 and 3, with Ridge regularization)
+  - Non‑parametric models: Decision Trees and k‑Nearest Neighbors
+  - A binary framing of the regression target with Logistic Regression (threshold at 60th percentile)
+  - Simple helper utilities (stabilized MAPE, table display, concise metric printing)
 
-Contents
-- `Multivariate_linear_regression.ipynb` — A step-by-step notebook covering data loading, exploratory data analysis, univariate polynomial regression (BMI), multivariate polynomial regression, decision trees, k-nearest neighbors, and a binary framing with logistic regression.
-- `requirements.txt` — Python package dependencies used to run the notebook.
+Files
+- `Multivariate_linear_regression.ipynb` — The main notebook with code, plots and reflections.
+- `requirements.txt` — Project dependencies (use to install the Python environment).
 
-Summary of the notebook
-- Part 1: Data loading, EDA, train/validation/test splits (75% train, ~10% val, 15% test). Uses the scikit-learn Diabetes dataset.
-- Part 2: Univariate polynomial regression using BMI as the single predictor. Fits degrees 0–5, selects the best model by validation R², refits on train+validation and evaluates on test. Includes plotting and equation display.
-- Part 3: Multivariate models including:
-  - Multivariate polynomial regression (degree 2 and 3), with Ridge regularization for degree 3.
-  - Decision Tree regression (varying max_depth).
-  - k-Nearest Neighbors regression (k=3 and k=7) with scaling in a pipeline.
-  - Logistic regression after binarizing the target at the 60th percentile (train+val threshold).
+Dataset
+- Uses the built-in `sklearn.datasets.load_diabetes` (standardized features). The notebook splits data into Train (75%), Validation (10%), and Test (15%).
 
-Key utilities and metrics
-- Custom helpers: MAPE (mean absolute percentage error), a small summarizer for R²/MAE/MAPE, and a console-friendly table printer.
-- Metrics used: R², MAE, MAPE for regression; accuracy, F1, ROC-AUC and confusion matrix for classification.
+Key results (from notebook experiments)
+- Best univariate BMI model (selected by validation R²) produced moderate test performance (example values from the notebook):
+  - Univariate TEST: R² ≈ 0.20, MAE ≈ 54.45, MAPE ≈ 47.6%
+- Multivariate polynomial (degree=2) generalized better than degree=3 in validation and was the chosen multivariate model. On the test set it reported (notebook values): R² ≈ 0.37 (example reported: R² = 0.3743).
+- Decision tree and kNN were evaluated; choice of tree depth and k mattered for bias/variance tradeoffs. kNN used scaling inside a pipeline (k=3 and k=7 were tried).
+- Logistic regression (binarized target at 60th percentile) achieved good discriminative performance in the notebook example:
+  - TEST: Accuracy ≈ 76.12%, F1 ≈ 65.22%, ROC-AUC ≈ 84.69% (see notebook for confusion matrix counts)
 
-Quickstart (Windows / PowerShell)
-1. Create and activate a virtual environment (recommended):
+Quickstart (Windows PowerShell)
+1) Create and activate a virtual environment:
 
 ```powershell
 python -m venv .venv; .\.venv\Scripts\Activate.ps1
 ```
 
-2. Install dependencies:
+2) Install dependencies:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-3. Launch Jupyter and open the notebook:
+3) Start Jupyter and open the notebook:
 
 ```powershell
 jupyter notebook Multivariate_linear_regression.ipynb
 ```
 
-Notes and findings
-- The notebook shows that BMI is a strong univariate predictor but is insufficient to capture all variance. Multivariate polynomial models can improve validation performance but risk overfitting (especially high-degree polynomials).
-- Decision Trees and kNN provide alternative non-linear approaches; kNN requires careful scaling and suffers with high-dimensional data.
-- Logistic regression (after binarizing the continuous target) demonstrates reasonable classification performance (accuracy/F1/ROC-AUC reported in the notebook).
+Running tips
+- Run the notebook from top to bottom. Cells rely on previously defined variables (train/val/test splits, helper functions, fitted models).
+- If you only want to re-run model evaluation sections, make sure the datasets and train/val/test splits are defined first (cells near Step 5).
 
-Recommendations / next steps
-- Add cross-validation (k-fold) for more reliable hyperparameter selection.
-- Compare regularization strengths (e.g., Ridge/ElasticNet) more thoroughly for polynomial models.
-- Add model serialization (joblib) and a small script to load a trained model and make predictions.
+Reproducibility
+- A fixed random seed is used in the notebook (RNG_SEED = 42) for reproducible splits and model behaviour where applicable.
 
-License
-- This repository is provided for educational purposes.
+Suggested next steps
+- Add k-fold cross-validation for hyperparameter tuning and more stable model selection.
+- Add a small script that serializes the final chosen model (joblib) and provides a predict API.
+- Trim `requirements.txt` to a minimal set used in the notebook if you want a lighter environment for deployment.
 
-Author
+Acknowledgements & Author
 - Notebook author: Albright Maduka
-# Multivariate_linear_regression
+- Course: CSCN8010 — Foundations of ML Frameworks
+
